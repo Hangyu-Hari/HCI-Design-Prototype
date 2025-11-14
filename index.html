@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xiaohongshu (Little Red Book) - Improved UI Prototype</title>
+    <title>Design Prototype</title>
     <style>
         * {
             margin: 0;
@@ -387,21 +387,24 @@
             background: white;
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: space-between;
             border-bottom: 1px solid #eee;
+            position: relative;
         }
 
         .back-btn {
             font-size: 24px;
             cursor: pointer;
             color: #333;
+            z-index: 1;
         }
 
         .history-title {
-            flex: 1;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 18px;
             font-weight: bold;
-            text-align: center;
         }
 
         .manage-btn {
@@ -411,6 +414,7 @@
             padding: 6px 12px;
             border: 1px solid #ddd;
             border-radius: 15px;
+            z-index: 1;
         }
 
         .search-box {
