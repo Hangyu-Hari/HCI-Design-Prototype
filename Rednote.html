@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xiaohongshu (Little Red Book) - Improved UI Prototype</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: #f8f8f8;
+            overflow-x: hidden;
+        }
+
+        /* Phone Container */
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Screen Content */
+        .screen {
+            height: 100%;
+            position: relative;
+            display: none;
+            background: white;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Profile Screen */
+        .profile-header {
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            padding: 20px;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-btn, .share-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-profile-btn {
+            background: rgba(255,255,255,0.9);
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .edit-profile-btn:hover {
+            background: white;
+            transform: translateY(-1px);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-info {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #89CFF0, #667BC6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .username {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .user-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .user-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-id {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .bio {
+            margin: 15px 0;
+            color: #444;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.9);
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #666;
+            border: 1px solid #ddd;
+            white-space: nowrap;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0;
+            background: white;
+            border-radius: 12px;
+            margin-top: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .content-search {
+            padding: 10px 20px;
+            background: white;
+        }
+
+        .content-search-wrapper {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 18px;
+            padding: 8px 15px;
+            gap: 8px;
+        }
+
+        .content-search-icon {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .content-search-input {
+            flex: 1;
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .content-search-input::placeholder {
+            color: #999;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #ff2442;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e61e3a;
+            transform: translateY(-1px);
+        }
+
+        .content-tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            color: #666;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .tab.active {
+            color: #ff2442;
+            font-weight: bold;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: #ff2442;
+            border-radius: 2px;
+        }
+
+        .content-grid {
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            overflow-y: auto;
+            height: calc(100% - 510px);
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+        }
+
+        /* Side Menu */
+        .side-menu {
+            position: absolute;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: rgba(30, 30, 30, 0.98);
+            backdrop-filter: blur(10px);
+            transition: left 0.3s;
+            z-index: 1000;
+            color: white;
+            overflow-y: auto;
+        }
+
+        .side-menu.active {
+            left: 0;
+        }
+
+        .menu-header {
+            padding: 60px 20px 20px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .menu-close {
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .menu-items {
+            padding: 10px 0;
+        }
+
+        .menu-item {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .menu-label {
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .menu-badge {
+            background: #ff2442;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+
+        /* History Screen */
+        .history-header {
+            padding: 15px 20px;
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .history-title {
+            flex: 1;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .manage-btn {
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+        }
+
+        .search-box {
+            padding: 10px 20px;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 20px;
+            padding: 10px 15px;
+            gap: 10px;
+        }
+
+        .search-icon {
+            color: #999;
+            font-size: 16px;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .history-tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .history-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            color: #666;
+            position: relative;
+        }
+
+        .history-tab.active {
+            color: #ff2442;
+            font-weight: bold;
+        }
+
+        .history-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: #ff2442;
+            border-radius: 2px;
+        }
+
+        .history-content {
+            padding: 10px;
+            overflow-y: auto;
+            height: calc(100% - 260px);
+        }
+
+        .history-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            color: #999;
+            padding: 12px 15px 8px;
+            font-weight: 500;
+            background: #fafafa;
+        }
+
+        .history-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 0;
+        }
+
+        .history-item {
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .history-item:hover {
+            background: #fafafa;
+        }
+
+        .history-image {
+            width: 70px;
+            height: 70px;
+            min-width: 70px;
+            background: linear-gradient(135deg, #e0e0e0, #d0d0d0);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .history-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        .history-text {
+            font-size: 14px;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            line-height: 1.4;
+        }
+
+        .history-meta {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 2000;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: #ff2442;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(255, 36, 66, 0.4);
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #e61e3a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 36, 66, 0.5);
+        }
+
+        .improvements-list {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            max-width: 500px;
+            z-index: 2000;
+        }
+
+        .improvements-list.hidden {
+            display: none;
+        }
+
+        .close-improvements {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .close-improvements:hover {
+            background: #ff2442;
+            color: white;
+        }
+
+        .improvements-list h3 {
+            color: #ff2442;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .improvements-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .improvements-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .improvements-list li:last-child {
+            border-bottom: none;
+        }
+
+        .improvement-label {
+            color: #ff2442;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 10px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            flex: 1;
+            padding: 8px 0;
+            transition: all 0.3s;
+        }
+
+        .nav-item.active {
+            color: #ff2442;
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            transition: transform 0.3s;
+        }
+
+        .nav-item:active .nav-icon {
+            transform: scale(0.9);
+        }
+
+        .nav-plus {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff2442, #ff6b6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 36, 66, 0.3);
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <!-- Profile Screen -->
+        <div class="screen active" id="profileScreen">
+            <div class="profile-header">
+                <div class="header-top">
+                    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+                    <div class="header-actions">
+                        <div class="edit-profile-btn">Edit Profile</div>
+                        <div class="share-btn">⤴</div>
+                    </div>
+                </div>
+
+                <div class="profile-info">
+                    <div class="avatar">👤</div>
+                    <div class="user-details">
+                        <div class="username">Name</div>
+                        <div class="user-meta">
+                            <div class="user-meta-row">
+                                <span class="user-id">ID: XXXXXXXXXX</span>
+                                <span>🗨️</span>
+                            </div>
+                            <div class="user-meta-row">
+                                <span>🌍 Location: Country</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bio">Signature here</div>
+
+                <div class="tags">
+                    <div class="tag">🦁 Zodiac</div>
+                    <div class="tag">📍 City, State</div>
+                    <div class="tag">🎓 NYU</div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">Following</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">Followers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">180</div>
+                        <div class="stat-label">Likes & Saves</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-search">
+                <div class="content-search-wrapper">
+                    <span class="content-search-icon">🔍</span>
+                    <input type="text" class="content-search-input" placeholder="Search my content...">
+                </div>
+            </div>
+
+            <div class="content-tabs">
+                <div class="tab active">Posts</div>
+                <div class="tab">Saved</div>
+                <div class="tab">Liked</div>
+            </div>
+
+            <div class="content-grid">
+                <div class="grid-item">📸 Post</div>
+                <div class="grid-item">📸 Post</div>
+                <div class="grid-item">📸 Post</div>
+                <div class="grid-item">📸 Post</div>
+                <div class="grid-item">📸 Post</div>
+                <div class="grid-item">📸 Post</div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Home</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🛍️</div>
+                    <div class="nav-label">Market</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-plus">+</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">💬</div>
+                    <div class="nav-label">Messages</div>
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Me</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Screen -->
+        <div class="screen" id="historyScreen">
+            <div class="history-header">
+                <span class="back-btn" onclick="goToProfile()">‹</span>
+                <div class="history-title">History</div>
+                <div class="manage-btn">Manage</div>
+            </div>
+
+            <div class="search-box">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search browsing history...">
+                </div>
+            </div>
+
+            <div class="history-tabs">
+                <div class="history-tab active">Posts</div>
+                <div class="history-tab">Live</div>
+            </div>
+
+            <div class="history-content">
+                <div class="history-section">
+                    <div class="section-title">Today</div>
+                    <div class="history-grid">
+                        <div class="history-item">
+                            <div class="history-image">📷</div>
+                            <div class="history-info">
+                                <div class="history-text">Amazing Halloween makeup looks</div>
+                                <div class="history-meta">
+                                    <span>❤️ 11K</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-image">📷</div>
+                            <div class="history-info">
+                                <div class="history-text">Thieves in London</div>
+                                <div class="history-meta">
+                                    <span>❤️ 6</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-image">📷</div>
+                            <div class="history-info">
+                                <div class="history-text">Awesome people</div>
+                                <div class="history-meta">
+                                    <span>❤️ Like</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-image">📷</div>
+                            <div class="history-info">
+                                <div class="history-text">NYU Major Application Difficulty</div>
+                                <div class="history-meta">
+                                    <span>❤️ 21</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-image">📷</div>
+                            <div class="history-info">
+                                <div class="history-text">Best coffee shops in Manhattan</div>
+                                <div class="history-meta">
+                                    <span>❤️ 2.3K</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-image">📷</div>
+                            <div class="history-info">
+                                <div class="history-text">Winter fashion trends 2025</div>
+                                <div class="history-meta">
+                                    <span>❤️ 8.9K</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Home</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🛍️</div>
+                    <div class="nav-label">Market</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-plus">+</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">💬</div>
+                    <div class="nav-label">Messages</div>
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Me</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Side Menu -->
+        <div class="side-menu" id="sideMenu">
+            <div class="menu-header">
+                <div class="menu-close" onclick="toggleMenu()">×</div>
+            </div>
+            <div class="menu-items">
+                <div class="menu-item">
+                    <div class="menu-icon">👥</div>
+                    <div class="menu-label">Add Friends</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">⚡</div>
+                    <div class="menu-label">Creator Center</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📝</div>
+                    <div class="menu-label">My Drafts</div>
+                    <div class="menu-badge">1</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">💬</div>
+                    <div class="menu-label">My Comments</div>
+                </div>
+                <div class="menu-item" onclick="goToHistory()">
+                    <div class="menu-icon">🕐</div>
+                    <div class="menu-label">Browse History</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">⬇️</div>
+                    <div class="menu-label">My Downloads</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📋</div>
+                    <div class="menu-label">Orders</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">🛒</div>
+                    <div class="menu-label">Shopping Cart</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">💳</div>
+                    <div class="menu-label">Wallet</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">🔗</div>
+                    <div class="menu-label">Mini Programs</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📜</div>
+                    <div class="menu-label">Community Guidelines</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">⚙️</div>
+                    <div class="menu-label">Settings</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+    </div>
+
+    <!-- Improvements List -->
+    <div class="improvements-list hidden" id="improvementsList">
+        <div class="close-improvements" onclick="closeImprovements()">×</div>
+        <h3>🎨 Design Improvements</h3>
+        <ul>
+            <li>
+                <span class="improvement-label">Improvement 1:</span>
+                Removed the redundant settings button in the top-right corner of the profile page, as the side menu already contains settings. This reduces visual clutter.
+            </li>
+            <li>
+                <span class="improvement-label">Improvement 2:</span>
+                Simplified the profile page layout by organizing user information more compactly, improving information density and readability.
+            </li>
+            <li>
+                <span class="improvement-label">Improvement 3:</span>
+                Added a search function to the History page, allowing users to quickly find previously viewed content, greatly improving efficiency.
+            </li>
+            <li>
+                <span class="improvement-label">Improvement 4:</span>
+                Changed History page from grid view to list view with thumbnails on the left. This allows users to see more information at a glance and makes it easier to scan through browsing history.
+            </li>
+            <li>
+                <span class="improvement-label">Improvement 5:</span>
+                Added a search bar above the content tabs (Posts/Saved/Liked) on the profile page, enabling users to search through their own content easily.
+            </li>
+            <li>
+                <span class="improvement-label">Improvement 6:</span>
+                Unified the design language with consistent rounded corners, spacing, and color scheme (primary color: #ff2442), enhancing overall visual consistency.
+            </li>
+            <li>
+                <span class="improvement-label">Improvement 7:</span>
+                Improved button visual hierarchy - primary action buttons are more prominent, while secondary functions are accessed through the side menu.
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        function goToHistory() {
+            closeMenu();
+            document.getElementById('profileScreen').classList.remove('active');
+            document.getElementById('historyScreen').classList.add('active');
+        }
+
+        function goToProfile() {
+            document.getElementById('historyScreen').classList.remove('active');
+            document.getElementById('profileScreen').classList.add('active');
+        }
+
+        function closeImprovements() {
+            document.getElementById('improvementsList').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
